@@ -36,4 +36,10 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findAll();
 
     }
+
+    @Override
+    public Board detailBoard(Integer id) {
+        return boardRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+    }
+
 }

@@ -8,7 +8,7 @@
 </head>
 <body>
 detail
-order<input type="text" id="detail_board_order" readonly/>
+id<input type="text" id="detail_board_id" readonly/>
 title<input type="text" id="detail_board_title" />
 content<input type="text" id="detail_board_content" />
 author<input type="text" id="detail_board_author" />
@@ -40,7 +40,7 @@ author<input type="text" id="detail_board_author" />
             type: "GET",
             contentType: 'application/json; charset=utf-8',
             data: {
-                order: final_id
+                id: final_id
             },
             cache: false,
             success: (obj_data, status, xhr) => {
@@ -57,7 +57,7 @@ author<input type="text" id="detail_board_author" />
                 alert(obj_data["detail_board"]["author"]);
                  */
                 //$("#detail_board_order").val(obj_data.order);
-                $("#detail_board_order").val(obj_data["detail_board"]["order"]);
+                $("#detail_board_order").val(obj_data["detail_board"]["id"]);
                 $("#detail_board_title").val(obj_data["detail_board"]["title"]);
                 $("#detail_board_content").val(obj_data["detail_board"]["content"]);
                 $("#detail_board_author").val(obj_data["detail_board"]["author"]);
@@ -75,7 +75,7 @@ author<input type="text" id="detail_board_author" />
             type: "GET",
             contentType: 'application/json; charset=utf-8',
             data: {
-                order: final_id
+                id: final_id
                 , title : $("#detail_board_title").val()
                 , content : $("#detail_board_content").val()
                 , author : $("#detail_board_author").val()

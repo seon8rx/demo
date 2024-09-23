@@ -10,4 +10,5 @@ import java.util.Map;
 public interface BoardService {
     Map<String, Object> createBoard(Map<String, Object> params);
     List<Board> listBoard();
+    Board detailBoard(Integer id);
 }
