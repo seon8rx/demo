@@ -18,7 +18,6 @@ import java.util.Map;
 @RestController
 public class UserRestController {
 
-
     private final UserService userService;;
     public UserRestController(UserService userService) {
         this.userService = userService;
@@ -26,9 +25,7 @@ public class UserRestController {
 
     @GetMapping("/create") // 이 안에 있는 주소값은 꼭 유니크해야함!! (클래스 안에서만)
     public Map<String, Object> create(@RequestParam Map<String, Object> params) {
-
         return userService.create(params);
-
     }
 
     @GetMapping("/list")
@@ -47,7 +44,12 @@ public class UserRestController {
     }
 
     @GetMapping("/delete")
-    public Map<String, Object> delete(@RequestParam Integer id) {
-        return userService.delete(id);
+    public Map<String, Object> delete(@RequestParam Map<String, Object> params) {
+        return userService.delete(Integer.parseInt(params.get("id") + ""));
+    }
+
+    @GetMapping("/login")
+    public Map<String, Object> login(@RequestParam Map<String, Object> params) {
+        return userService.login(params);
     }
 }
