@@ -8,8 +8,7 @@ import lombok.Setter;
 @Entity
 public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    Long id;
+    @Id Long id;
 
     @Setter @Column (nullable = false)
     String title;

@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 public class NoticeRestController {
 
-    NoticeService noticeService;
+    private final NoticeService noticeService;
     public NoticeRestController(NoticeService noticeService) {
         this.noticeService = noticeService;
     }

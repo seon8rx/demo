@@ -19,7 +19,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public Map<String, Object> create(Map<String, Object> params) {
 
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<String, Object>();
 
         Notice notice = new Notice();
         notice.setTitle(params.get("title").toString());
