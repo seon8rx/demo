@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.domain.Notice;
+import com.example.demo.dto.NoticeDto;
 import com.example.demo.repository.NoticeRepository;
 import com.example.demo.service.NoticeService;
 import org.springframework.stereotype.Service;
@@ -17,18 +18,25 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public Map<String, Object> create(Map<String, Object> params) {
+    public NoticeDto.CreateResDto create(NoticeDto .CreateReqDto param) {
 
-        Map<String, Object> result = new HashMap<String, Object>();
+        /*Notice notice = param.toEntity();
+        notice = noticeRepository.save(notice);
+        NoticeDto.CreateResDto resDto = notice.toCreateResDto();
+        return resDto;*/
 
-        Notice notice = new Notice();
-        notice.setTitle(params.get("title").toString());
-        notice.setContent(params.get("content").toString());
-        noticeRepository.save(notice);
+        return noticeRepository.save(param.toEntity()).toCreateResDto();
 
-        result.put("success", true);
+        /*Map<String, Object> result = new HashMap<String, Object>();*/
+
+        /*Notice notice = new Notice();
+        notice.setTitle(param.getTitle());
+        notice.setContent(param.getContent());
+        noticeRepository.save(notice);*/
+
+      /*  result.put("success", true);
         result.put("id", notice.getId());
-        return result;
+        return result;*/
     }
 
     @Override
@@ -38,20 +46,18 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public Map<String, Object> update(Map<String, Object> params) {
+    public void update(NoticeDto.UpdateReqDto param) {
 
-        Notice notice = noticeRepository.findById(Long.parseLong(params.get("id").toString())).orElseThrow(() -> new RuntimeException(""));
+        Notice notice = noticeRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
 
-        if(params.get("title") != null){
-            notice.setTitle(params.get("title").toString());
+        if(param.getTitle() != null){
+            notice.setTitle(param.getTitle());
         }
-        if(params.get("content") != null){
-            notice.setContent(params.get("content").toString());
+        if(param.getContent() != null){
+            notice.setContent(param.getContent());
         }
 
         noticeRepository.save(notice);
-
-        return null;
     }
 
     @Override
