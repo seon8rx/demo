@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
 list
+
 <div id="div_list">
 </div>
 
-<button onclick="list_user()">
+<button onclick="list()">
     사용자 전체 목록
 </button>
 
 <script>
-    function list_user(){
+    function list(){
         $.ajax({
             url: "/api/user/list",
             type: "GET",
@@ -37,7 +37,10 @@ list
             }
         });
     }
+    /*
+    */
 </script>
+
 
 </body>
 </html>

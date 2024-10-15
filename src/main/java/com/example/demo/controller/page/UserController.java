@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 
     @GetMapping("/{page}")
-    public String page(@PathVariable String page) {
+    public String page(@PathVariable String page){
         return "user/" + page;
     }
 
     @GetMapping("/{page}/{id}")
-    public String page(@PathVariable String page, @PathVariable String id) {
+    public String page2(@PathVariable String page, @PathVariable String id){
         return "user/" + page;
     }
+
 }

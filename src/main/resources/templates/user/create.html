@@ -9,11 +9,12 @@
 create
 
 <div id="div_id" class="div_abcde">
-    사용자 테스트
+    사용자 입력 테스트
 </div>
+
 아이디
 <input type="text" id="create_user_username" />
-내용
+비번
 <input type="password" id="create_user_password" />
 이름
 <input type="text" id="create_user_name" />
@@ -24,19 +25,18 @@ create
     저장
 </button>
 
-
 <script>
     function create_user(){
         $.ajax({
             url: "/api/user/create",
-            type: "GET",
+            type: "POST",
             contentType : 'application/json; charset=utf-8',
-            data: {
+            data: JSON.stringify({
                 username : $("#create_user_username").val()
                 ,password : $("#create_user_password").val()
                 ,name : $("#create_user_name").val()
                 ,phone : $("#create_user_phone").val()
-            },
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));
