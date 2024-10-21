@@ -32,6 +32,8 @@ public class UserDto {
     @Setter
     @Getter
     public static class LoginResDto {
+        private Long id;
+
         private boolean result;
     }
 

@@ -6,31 +6,35 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-로그인
+create
 
-아이디
-<input type="text" id="create_user_username" />
-비번
-<input type="password" id="create_user_password" />
+<div id="div_id" class="div_abcde">
+    자주묻는질문 신규 입력
+</div>
 
-<button onclick="login_user()">
-    로그인
+제목
+<input type="text" id="create_faq_title" />
+내용
+<input type="text" id="create_faq_content" />
+
+<button onclick="create_faq()">
+    저장
 </button>
 
 <script>
-    function login_user(){
+    function create_faq(){
         $.ajax({
-            url: "/api/user/login",
+            url: "/api/faq",
             type: "POST",
             contentType : 'application/json; charset=utf-8',
             data: JSON.stringify({
-                username : $("#create_user_username").val()
-                ,password : $("#create_user_password").val()
+                title : $("#create_faq_title").val()
+                ,content : $("#create_faq_content").val()
+                ,content : localStorage.getItem("userId")
             }),
             cache: false,
             success: (obj_data, status, xhr)=>{
-                // alert(JSON.stringify(obj_data));
-                localStorage.setItem
+                alert(JSON.stringify(obj_data));
             },
             error: (obj_data, status, xhr)=>{
                 alert("error!!");

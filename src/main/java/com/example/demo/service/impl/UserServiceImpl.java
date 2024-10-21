@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
         }
         UserDto.LoginResDto res = new UserDto.LoginResDto();
         res.setResult(true);
+        res.setId(user.getId());
         return res;
     }
     @Override
