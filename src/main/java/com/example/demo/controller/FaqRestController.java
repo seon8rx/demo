@@ -12,9 +12,7 @@ import java.util.List;
 public class FaqRestController {
 
     private final FaqService faqService;
-    public FaqRestController(
-            FaqService faqService
-    ) {
+    public FaqRestController(FaqService faqService) {
         this.faqService = faqService;
     }
 
