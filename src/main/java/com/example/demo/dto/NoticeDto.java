@@ -42,4 +42,10 @@ public class NoticeDto {
         private String content;
     }
 
+    @Setter
+    @Getter
+    public static class ListReqDto {
+        private String title;
+    }
+
 }

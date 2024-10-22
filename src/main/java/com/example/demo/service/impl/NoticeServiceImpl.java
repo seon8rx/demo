@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.domain.Notice;
 import com.example.demo.dto.NoticeDto;
+import com.example.demo.mapper.NoticeMapper;
 import com.example.demo.repository.NoticeRepository;
 import com.example.demo.service.NoticeService;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,10 @@ import java.util.Map;
 public class NoticeServiceImpl implements NoticeService {
 
     private final NoticeRepository noticeRepository;
-    public NoticeServiceImpl(
-            NoticeRepository noticeRepository
-    ) {
+    private final NoticeMapper noticeMapper;
+    public NoticeServiceImpl(NoticeRepository noticeRepository, NoticeMapper noticeMapper) {
         this.noticeRepository = noticeRepository;
+        this.noticeMapper = noticeMapper;
     }
 
     /**/
@@ -61,18 +62,19 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public NoticeDto.DetailResDto detail(Long id) {
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
-        return entityToDto(notice);
+        return noticeMapper.detail(id);
+        /*Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        return entityToDto(notice);*/
     }
 
 
     @Override
     public List<NoticeDto.DetailResDto> list() {
         List<NoticeDto.DetailResDto> list = new ArrayList<NoticeDto.DetailResDto>();
-        List<Notice> noticeList = noticeRepository.findAll();
-        for(Notice notice : noticeList) {
-            list.add(entityToDto(notice));
-        }
+//        List<Notice> noticeList = noticeRepository.findAll();
+//        for(Notice notice : noticeList) {
+//            list.add(entityToDto(notice));
+//        }
         return list;
     }
 

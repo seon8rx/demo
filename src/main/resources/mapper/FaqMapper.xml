@@ -35,6 +35,7 @@
         LEFT JOIN user
             ON faq.user_id = user.id
         WHERE faq.id is not NULL
+        <if test = "title != null and title !=''">AND faq.title = #{title}</if>
     </select>
 
 </mapper>
