@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.FaqMapper">
+
+    <!---->
+    <!--
+    /*SELECT faq.id
+             , faq.title
+             , faq.content
+             , faq.user_id as userId
+             , user.username as userUserName
+        FROM faq, user
+        WHERE faq.id = #{id}
+          AND faq.user_id = user.id*/
+    -->
+    <select id="detail" parameterType="hashMap" resultType="com.example.demo.dto.FaqDto$DetailResDto">
+        SELECT faq.id
+             , faq.title
+             , faq.content
+             , faq.user_id as userId
+             , user.userName as userUserName
+        FROM faq
+        LEFT JOIN user
+          ON faq.user_id = user.id
+        WHERE faq.id = #{id}
+    </select>
+
+    <select id="list" parameterType="hashMap" resultType="com.example.demo.dto.FaqDto$DetailResDto">
+        SELECT faq.id
+             , faq.title
+             , faq.content
+             , faq.user_id as userId
+             , user.username as userUserName
+        FROM faq
+        LEFT JOIN user
+            ON faq.user_id = user.id
+        WHERE faq.id is not NULL
+    </select>
+
+</mapper>

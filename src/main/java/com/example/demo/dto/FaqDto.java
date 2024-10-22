@@ -44,4 +44,10 @@ public class FaqDto {
         private String userUserName;
     }
 
+    @Setter
+    @Getter
+    public static class ListReqDto {
+        private String title;
+    }
+
 }
