@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.DefaultDto;
 import com.example.demo.dto.NoticeDto;
 import com.example.demo.service.NoticeService;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +12,13 @@ import java.util.List;
 public class NoticeRestController {
 
     private final NoticeService noticeService;
-    public NoticeRestController(
-            NoticeService noticeService
-    ) {
+    public NoticeRestController(NoticeService noticeService) {
         this.noticeService = noticeService;
     }
 
     /**/
-
     @PostMapping("")
-    public NoticeDto.CreateResDto create(@RequestBody NoticeDto.CreateReqDto param){
+    public DefaultDto.CreateResDto create(@RequestBody NoticeDto.CreateReqDto param){
         return noticeService.create(param);
     }
     @PutMapping("")
@@ -37,7 +35,11 @@ public class NoticeRestController {
         return noticeService.detail(id);
     }
     @GetMapping("/list")
-    public List<NoticeDto.DetailResDto> list(){
-        return noticeService.list();
+    public List<NoticeDto.DetailResDto> list(NoticeDto.ListReqDto param){
+        return noticeService.list(param);
+    }
+    @GetMapping("/pagedList")
+    public NoticeDto.PagedListResDto pagedList(NoticeDto.PagedListReqDto param){
+        return noticeService.pagedList(param);
     }
 }

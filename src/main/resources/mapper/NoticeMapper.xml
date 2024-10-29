@@ -1,33 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.NoticeMapper">
-
-    <!---->
-    <!--
-    /*SELECT faq.id
-             , faq.title
-             , faq.content
-             , faq.user_id as userId
-             , user.username as userUserName
-        FROM faq, user
-        WHERE faq.id = #{id}
-          AND faq.user_id = user.id*/
-    -->
     <select id="detail" parameterType="hashMap" resultType="com.example.demo.dto.NoticeDto$DetailResDto">
         SELECT notice.id
+             , notice.deleted
+             , notice.created_at as createdAt
+             ,SUBSTRING(notice.created_at, 1, 19) as createdAtDateTime
+             , notice.modified_at as modifiedAt
              , notice.title
              , notice.content
         FROM notice
         WHERE notice.id = #{id}
     </select>
 
-    <select id="detail" parameterType="hashMap" resultType="com.example.demo.dto.NoticeDto$DetailResDto">
+    <select id="list" parameterType="hashMap" resultType="com.example.demo.dto.NoticeDto$DetailResDto">
         SELECT notice.id
-             , notice.title
-             , notice.content
+        , notice.deleted
+        , notice.created_at as createdAt
+        , notice.modified_at as modifiedAt
+        , notice.title
+        , notice.content
         FROM notice
-        WHERE notice.id = is not NULL
-        <if test = "title != null and title != ''">AND notice.title = #{title}</if>
+        WHERE notice.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+        <if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
+        ORDER BY notice.created_at DESC
     </select>
+
+    <select id="pagedList" parameterType="hashMap" resultType="com.example.demo.dto.NoticeDto$DetailResDto">
+        SELECT notice.id
+        , notice.deleted
+        , notice.created_at as createdAt
+        , notice.modified_at as modifiedAt
+        , notice.title
+        , notice.content
+        FROM notice
+        WHERE notice.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+        <if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
+        ORDER BY notice.created_at DESC
+        LIMIT #{offset}, #{perpage}
+    </select>
+
+    <select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+        SELECT count(notice.id) as listsize
+        FROM notice
+        WHERE notice.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+        <if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
+    </select>
+
 
 </mapper>

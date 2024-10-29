@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.DefaultDto;
 import com.example.demo.dto.FaqDto;
 import com.example.demo.service.FaqService;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class FaqRestController {
 
     /**/
     @PostMapping("")
-    public ResponseEntity<FaqDto.CreateResDto> create(@RequestBody FaqDto.CreateReqDto param){
+    public ResponseEntity<DefaultDto.CreateResDto> create(@RequestBody FaqDto.CreateReqDto param){
         return ResponseEntity.ok(faqService.create(param));
     }
     @PutMapping("")

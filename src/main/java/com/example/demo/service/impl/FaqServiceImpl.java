@@ -1,9 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.domain.Faq;
-import com.example.demo.domain.User;
+import com.example.demo.dto.DefaultDto;
 import com.example.demo.dto.FaqDto;
-import com.example.demo.dto.UserDto;
 import com.example.demo.mapper.FaqMapper;
 import com.example.demo.repository.FaqRepository;
 import com.example.demo.repository.UserRepository;
@@ -19,7 +18,6 @@ public class FaqServiceImpl implements FaqService {
     private final FaqRepository faqRepository;
     private final FaqMapper faqMapper;
     private final UserRepository userRepository;
-
     public FaqServiceImpl(FaqRepository faqRepository, FaqMapper faqMapper, UserRepository userRepository) {
         this.faqRepository = faqRepository;
         this.faqMapper = faqMapper;
@@ -27,9 +25,8 @@ public class FaqServiceImpl implements FaqService {
     }
 
     /**/
-
     @Override
-    public FaqDto.CreateResDto create(FaqDto.CreateReqDto param) {
+    public DefaultDto.CreateResDto create(FaqDto.CreateReqDto param) {
         System.out.println("create");
         return faqRepository.save(param.toEntity()).toCreateResDto();
     }
@@ -51,36 +48,28 @@ public class FaqServiceImpl implements FaqService {
         faqRepository.delete(faq);
     }
 
-    /*public FaqDto.DetailResDto entityToDto(Faq faq){
-        //돌려줄 디티오에 정보를 담아보겠습니다. (실제로는 Mapper를 사용할 것이라, 이렇게는 잘 안씀)
-        FaqDto.DetailResDto res = new FaqDto.DetailResDto();
-        res.setId(faq.getId());
-        res.setTitle(faq.getTitle());
-        res.setContent(faq.getContent());
-
-        try {
-            User user = userRepository.findById(faq.getUserId()).orElseThrow(() -> new RuntimeException(""));
-            res.setUserUserName(user.getUsername());
-        } catch(Exception e) {}
-
-        return res;
-    }*/
-
+    public FaqDto.DetailResDto get(Long id) {
+        return faqMapper.detail(id);
+    }
+    public List<FaqDto.DetailResDto> detailList(List<FaqDto.DetailResDto> list) {
+        List<FaqDto.DetailResDto> newList = new ArrayList<>();
+        for(FaqDto.DetailResDto each : list) {
+            newList.add(get(each.getId()));
+        }
+        return newList;
+    }
     @Override
     public FaqDto.DetailResDto detail(Long id) {
-        return faqMapper.detail(id);
+        return get(id);
     }
     @Override
     public List<FaqDto.DetailResDto> list(FaqDto.ListReqDto param) {
-        /*List<FaqDto.DetailResDto> list = new ArrayList<FaqDto.DetailResDto>();
-        List<Faq> faqList = faqRepository.findAll();
-        for(Faq faq : faqList) {
-            list.add(entityToDto(faq));
-        }
-        return list;*/
-        return faqMapper.list(param);
+        return detailList(faqMapper.list(param));
     }
 
-
-
+    @Override
+    public DefaultDto.PagedListResDto pagedList(FaqDto.PagedListReqDto param){
+        int countList = faqMapper.pagedListCount(param);
+        return null;
+    }
 }
