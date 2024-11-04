@@ -98,4 +98,33 @@ public class DefaultDto {
 
     }
 
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class ScrollListReqDto {
+        private String orderway; //정렬 방향
+        private Integer perpage; //한페이지에 몇개 보여줄지
+        private Long cursor;
+        private String createdAt;
+
+        private Boolean deleted;
+
+        public void init() {
+            Integer perpage = getPerpage();
+            if(perpage == null) {
+                setPerpage(10);
+            } else {
+                if(perpage < 0) {
+                    setPerpage(10);
+                }
+            }
+
+            String orderway = getOrderway();
+            if(orderway == null || "".equals(orderway)) {
+                orderway = "desc";
+            }
+
+            setOrderway(orderway);
+        }
+
+    }
+
 }
