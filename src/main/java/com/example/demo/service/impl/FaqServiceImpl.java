@@ -69,7 +69,46 @@ public class FaqServiceImpl implements FaqService {
 
     @Override
     public DefaultDto.PagedListResDto pagedList(FaqDto.PagedListReqDto param){
-        int countList = faqMapper.pagedListCount(param);
-        return null;
+        DefaultDto.PagedListResDto returnVal = DefaultDto.PagedListResDto.init(param, faqMapper.pagedListCount(param));
+        returnVal.setList(faqMapper.pagedList(param));
+        return returnVal;
+
+        /*int perpage = param.getPerpage();
+        int itemcount = faqMapper.pagedListCount(param);
+        int pagecount = itemcount / perpage;
+
+        if(itemcount % perpage > 0) {
+            pagecount++;
+        }
+        int callpage = param.getCallpage();
+        if(callpage < 1) {
+            callpage = 1;
+        }
+        if(callpage > pagecount) {
+            callpage = pagecount;
+        }
+        int offset = (callpage - 1) * perpage;
+
+        param.setOffset(offset);
+
+        String orderby = param.getOrderby();
+        if(orderby == null || "".equals(orderby)) {
+            orderby = "created_at";
+        }
+
+        String orderway = param.getOrderway();
+        if(orderway == null || "".equals(orderway)) {
+            orderway = "desc";
+        }*/
+
+        /*//파라미터 완성 후 리스트 조회
+        List<FaqDto.DetailResDto> plist = faqMapper.pagedList(param);
+
+        DefaultDto.PagedListResDto returnVal = DefaultDto.PagedListResDto.builder()
+                .itemcount(itemcount).pagecount(pagecount).callpage(callpage)
+                .list(detailList(plist))
+                .build();
+
+        return returnVal;*/
     }
 }
