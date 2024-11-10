@@ -1,19 +1,38 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 @RequestMapping("/api")
 @RestController
 public class DefaultRestController {
 
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        System.out.println(fileName);
+
+        String filePath = "/Users/seooonggyu/Documents/fallsprbasic/";
+        File newfile = new File(filePath);
+        if(!newfile.exists()) {
+            newfile.mkdirs();
+        }
+
+        Date date = new Date();
+        String temp_date = date.getTime() + "";
+        String finalName = filePath + temp_date + "_" + fileName;
+        FileCopyUtils.copy(file.getBytes(), new File(finalName));
+
+        return ResponseEntity.status(HttpStatus.OK).body(temp_date + "_" + fileName);
+    }
+/*
     @GetMapping("/mapTest") // 이 안에 있는 주소값은 꼭 유니크해야함!! (클래스 안에서만)
     public Map<String, Object> mapTest() {
 
@@ -64,4 +83,6 @@ public class DefaultRestController {
 
         return map_result;
     }
+    */
+
 }
