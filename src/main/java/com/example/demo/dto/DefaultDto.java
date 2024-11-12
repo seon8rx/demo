@@ -16,14 +16,27 @@ public class DefaultDto {
     }
 
     @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
-    public static class UpdateReqDto {
+    public static class CreateResDto {
         private Long id;
-        private Boolean deleted;
     }
 
     @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
-    public static class CreateResDto {
+    public static class UpdateReqDto {
         private Long id;
+        private Boolean deleted;
+
+    }
+
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class LoginReqDto {
+        private String username;
+        private String password;
+    }
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class LoginResDto {
+        private boolean result;
+        private Long id; //식별자 역할?
+        private String username;
     }
 
     //여기는 빌더 사용 금지

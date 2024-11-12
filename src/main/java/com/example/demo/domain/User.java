@@ -1,28 +1,35 @@
 package com.example.demo.domain;
 
+import com.example.demo.dto.DefaultDto;
 import com.example.demo.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
-public class User {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id Long id;
+public class User extends AuditingFields{
 
-    @Setter @Column(unique=true, nullable=false)
-    String username;
+    @Column(unique=true, nullable=false) String username;
+    @Column(nullable=false) String password;
+    String name;
+    String phone;
 
-    @Setter @Column(nullable=false)
-    String password;
+    protected User() {}
+    private User(Boolean deleted, String username, String password, String name, String phone) {
+        this.deleted = deleted;
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+    }
 
-    @Setter String name;
-    @Setter String phone;
+    public static User of (String username, String password, String name, String phone){
+        return new User(false, username, password, name, phone);
+    }
 
-    public UserDto.CreateResDto toCreateResDto(){
-        UserDto.CreateResDto res = new UserDto.CreateResDto();
-        res.setId(getId());
-        return res;
+    public DefaultDto.CreateResDto toCreateResDto(){
+        return DefaultDto.CreateResDto.builder().id(getId()).build();
     }
 }

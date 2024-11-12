@@ -15,7 +15,7 @@ public class UserController {
     }
 
     @GetMapping("/{page}/{id}")
-    public String page2(@PathVariable String page, @PathVariable String id){
+    public String page2(@PathVariable String page, @PathVariable Long id){
         return "user/" + page;
     }
 
