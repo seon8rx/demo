@@ -17,52 +17,43 @@ import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(
+            UserRepository userRepository
+            , UserMapper userMapper
+    ) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-    }
-    /*
-    @Override
-    public DefaultDto.CreateResDto signup(UserDto.CreateReqDto param) {
-        if(param.getUsername() == null || param.getPassword() == null || param.getName() == null || param.getPhone() == null){
-            throw new RuntimeException("not enough parameters");
-        }
-        return create(param);
-    }
-    */
-    @Override
-    public DefaultDto.CreateResDto create(UserDto.CreateReqDto param) {
-        System.out.println("create");
-        User user = userRepository.findByUsername(param.getUsername());
-        if(user != null){ throw new RuntimeException("id exist"); }
-        return userRepository.save(param.toEntity()).toCreateResDto();
     }
 
     @Override
     public DefaultDto.CreateResDto login(UserDto.LoginReqDto param) {
+        System.out.println("login");
         User user = userRepository.findByUsernameAndPassword(param.getUsername(), param.getPassword());
-        if(user == null) {
-            throw new RuntimeException("id password not matched");
+        if(user == null){
+            throw new RuntimeException("username or password incorrect");
         }
         return DefaultDto.CreateResDto.builder().id(user.getId()).build();
     }
 
-    /*@Override
-    public boolean id(String username) {
-        User user = userRepository.findByUsername(username);
-        return user == null;
-    }*/
-
     /**/
+
+    @Override
+    public DefaultDto.CreateResDto create(UserDto.CreateReqDto param) {
+        System.out.println("create");
+        User user = userRepository.findByUsername(param.getUsername());
+        if(user != null){
+            //return DefaultDto.CreateResDto.builder().id((long) -400).build();
+            throw new RuntimeException("already exist");
+        }
+        return userRepository.save(param.toEntity()).toCreateResDto();
+    }
     @Override
     public void update(UserDto.UpdateReqDto param) {
         System.out.println("update");
         User user = userRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
-        if(param.getPassword() != null) {
-            user.setPassword(param.getPassword());
-        }
         if(param.getName() != null) {
             user.setName(param.getName());
         }
@@ -71,23 +62,19 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
     }
-
-    @Override
-    public List<UserDto.DetailResDto> list(UserDto.ListReqDto param) {
-        return detailList(userMapper.list(param));
-    }
-    @Override
-    public UserDto.DetailResDto detail(Long id) {
-        return get(id);
-    }
     @Override
     public void delete(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
-        userRepository.delete(user);
+        user.setDeleted(true);
+        userRepository.save(user);
+    }
+    @Override
+    public void deletes(DefaultDto.DeletesReqDto param) {
+        for(Long id : param.getIds()){
+            delete(id);
+        }
     }
 
-
-    /**/
     public UserDto.DetailResDto get(Long id) {
         return userMapper.detail(id);
     }
@@ -98,22 +85,30 @@ public class UserServiceImpl implements UserService {
         }
         return newList;
     }
-
     @Override
-    public DefaultDto.PagedListResDto pagedList(UserDto.PagedListReqDto param) {
-        DefaultDto.PagedListResDto result = DefaultDto.PagedListResDto.init(param, userMapper.pagedListCount(param));
-        result.setList(detailList(userMapper.pagedList(param)));
-        return result;
+    public UserDto.DetailResDto detail(Long id) {
+        return get(id);
+    }
+    @Override
+    public List<UserDto.DetailResDto> list(UserDto.ListReqDto param) {
+        return detailList(userMapper.list(param));
     }
 
     @Override
-    public List<UserDto.DetailResDto> scrollList(UserDto.ScrollListReqDto param) {
+    public DefaultDto.PagedListResDto pagedList(UserDto.PagedListReqDto param){
+        DefaultDto.PagedListResDto retrunVal = DefaultDto.PagedListResDto.init(param, userMapper.pagedListCount(param));
+        retrunVal.setList(detailList(userMapper.pagedList(param)));
+        return retrunVal;
+    }
+    @Override
+    public List<UserDto.DetailResDto> scrollList(UserDto.ScrollListReqDto param){
         param.init();
         Long cursor = param.getCursor();
-        if(cursor != null) {
+        if(cursor != null){
             User user = userRepository.findById(cursor).orElseThrow(() -> new RuntimeException(""));
             param.setCreatedAt(user.getCreatedAt() + "");
         }
         return detailList(userMapper.scrollList(param));
     }
+
 }
