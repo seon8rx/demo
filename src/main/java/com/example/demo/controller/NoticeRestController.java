@@ -14,8 +14,7 @@ import java.util.List;
 public class NoticeRestController {
 
     private final NoticeService noticeService;
-    public NoticeRestController(
-            NoticeService noticeService
+    public NoticeRestController(NoticeService noticeService
     ) {
         this.noticeService = noticeService;
     }
