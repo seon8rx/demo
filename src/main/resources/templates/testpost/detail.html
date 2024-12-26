@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+<div id="div_id" class="div_detail">
+    testpost DETAIL (UPDATE, DELETE)
+</div>
+
+id <input type="text" id="detail_testpost_id" readonly/>
+title <input type="text" id="detail_testpost_title" />
+content <input type="text" id="detail_testpost_content" />
+userId <input type="text" id="detail_testpost_userId" readonly/>
+deleted <input type="text" id="detail_testpost_deleted" readonly/>
+
+<button onclick="update_testpost()">
+    수정
+</button>
+<button onclick="delete_testpost()">
+    삭제
+</button>
+
+<script>
+    let temp_url = window.location.href;
+    let split_temp_url = temp_url.split('/');
+    let final_id = split_temp_url[split_temp_url.length - 1];
+    let split_q = final_id.split("?");
+    if(split_q.length > 0){
+        final_id = split_q[0];
+    }
+    $( document ).ready(function() {
+        detail_testpost();
+    });
+
+    function detail_testpost(){
+        $.ajax({
+            url: "/api/testpost/detail",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                id : final_id
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                $("#detail_testpost_id").val(obj_data["id"]);
+                $("#detail_testpost_title").val(obj_data["title"]);
+                $("#detail_testpost_content").val(obj_data["content"]);
+                $("#detail_testpost_userId").val(obj_data["userId"]);
+                $("#detail_testpost_deleted").val(obj_data["deleted"]);
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("ERROR");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+
+    function update_testpost(){
+        $.ajax({
+            url: "/api/testpost",
+            type: "PUT",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+                ,userId : $("#detail_testpost_userId").val()
+                ,title : $("#detail_testpost_title").val()
+                ,content : $("#detail_testpost_content").val()
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("ERROR");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    function delete_testpost(){
+        $.ajax({
+            url: "/api/testpost",
+            type: "DELETE",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("ERROR");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+</script>
+</body>
+</html>

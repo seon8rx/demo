@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestpostMapper">
+    <select id="detail" parameterType="hashMap" resultType="com.example.demo.dto.TestpostDto$DetailResDto">
+        SELECT testpost.id
+             , testpost.deleted
+             , testpost.created_at as createdAt
+             , testpost.modified_at as modifiedAt
+             , testpost.title
+             , testpost.content
+             , testpost.user_id as userId
+        FROM testpost
+                 LEFT JOIN user
+                           ON testpost.user_id = user.id
+        WHERE testpost.id = #{id}
+    </select>
+    <select id="list" parameterType="hashMap" resultType="com.example.demo.dto.TestpostDto$DetailResDto">
+        SELECT testpost.id
+        FROM testpost
+        WHERE testpost.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND testpost.deleted = #{deleted}</if>
+        <if test = "title != null and title !=''">AND testpost.title LIKE CONCAT('%', #{title}, '%')</if>
+        ORDER BY testpost.id ASC
+    </select>
+</mapper>
