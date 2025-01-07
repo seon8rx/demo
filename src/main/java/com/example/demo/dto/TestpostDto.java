@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 public class TestpostDto {
 
@@ -20,8 +21,11 @@ public class TestpostDto {
         private String title;
         private String content;
 
+        private MultipartFile file;
+        private String sfile;
+
         public Testpost toEntity() {
-            return Testpost.of(getUserId(), getTitle(), getContent());
+            return Testpost.of(getUserId(), getTitle(), getContent(), getSfile());
         }
     }
 

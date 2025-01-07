@@ -16,17 +16,20 @@ public class Testpost extends AuditingFields {
     String title;
     @Setter @Column(nullable = true)
     String content;
+    @Setter @Column(nullable = true)
+    String file;
 
     protected Testpost() {}
-    private Testpost(Boolean deleted, String userId, String title, String content) {
+    private Testpost(Boolean deleted, String userId, String title, String content, String file) {
         this.deleted = deleted;
         this.userId = userId;
         this.title = title;
         this.content = content;
+        this.file = file;
     }
 
-    public static Testpost of(String userId, String title, String content) {
-        return new Testpost(false, userId, title, content);
+    public static Testpost of(String userId, String title, String content, String file) {
+        return new Testpost(false, userId, title, content, file);
     }
 
     public DefaultDto.CreateResDto toCreateResDto() {

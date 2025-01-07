@@ -6,27 +6,28 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-<div id="div_id" class="div_list">
-    testpost LIST
+<div id="div_id" class="div_deleted_list">
+    testpost DELETED_LIST
 </div>
-<div id="div_list">
+<div id="div_deleted_list">
 </div>
 
-<button onclick="list()">
-    testpost 전체 목록
+<button onclick="deleted_list()">
+    testpost 삭제된 전체 목록
 </button>
 
 <script>
-    function list(){
+    //
+    function deleted_list(){
         $.ajax({
-            url: "/api/testpost/list",
+            url: "/api/testpost/deleted_list",
             type: "GET",
             contentType : 'application/json; charset=utf-8',
             cache: false,
             success: (obj_data, status, xhr)=>{
-                $("#div_list").html("");
+                $("#div_deleted_list").html("");
                 for(let each of obj_data){
-                    $("#div_list").append(
+                    $("#div_deleted_list").append(
                         "<a href='/testpost/detail/"+each["id"]+"'>"+each["id"]+". " + " '" + each["title"] + "' by " +each["userId"] +"</a>" +"<br/>"
                     );
                 }
@@ -37,7 +38,6 @@
             }
         });
     }
-    //
 </script>
 
 </body>

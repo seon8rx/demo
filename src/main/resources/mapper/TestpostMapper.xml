@@ -17,8 +17,16 @@
     <select id="list" parameterType="hashMap" resultType="com.example.demo.dto.TestpostDto$DetailResDto">
         SELECT testpost.id
         FROM testpost
-        WHERE testpost.id is not NULL
-        <if test = "deleted != null and deleted !=''">AND testpost.deleted = #{deleted}</if>
+        WHERE testpost.id is not NULL AND testpost.deleted is FALSE
+        <!--<if test = "deleted != null and deleted !=''">AND testpost.deleted = #{deleted}</if>-->
+        <if test = "title != null and title !=''">AND testpost.title LIKE CONCAT('%', #{title}, '%')</if>
+        ORDER BY testpost.id ASC
+    </select>
+    <select id="deletedList" parameterType="hashMap" resultType="com.example.demo.dto.TestpostDto$DetailResDto">
+        SELECT testpost.id
+        FROM testpost
+        WHERE testpost.id is not NULL AND testpost.deleted is TRUE
+        <!--<if test = "deleted != null and deleted !=''">AND testpost.deleted = #{deleted}</if>-->
         <if test = "title != null and title !=''">AND testpost.title LIKE CONCAT('%', #{title}, '%')</if>
         ORDER BY testpost.id ASC
     </select>

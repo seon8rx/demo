@@ -6,10 +6,19 @@ import com.example.demo.dto.TestpostDto;
 import com.example.demo.mapper.TestpostMapper;
 import com.example.demo.repository.TestpostRepository;
 import com.example.demo.service.TestpostService;
+import com.example.demo.util.FileUpload;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TestpostServiceImpl implements TestpostService {
@@ -34,6 +43,10 @@ public class TestpostServiceImpl implements TestpostService {
     @Override
     public List<TestpostDto.DetailResDto> list(TestpostDto.ListReqDto param) {
         return detailList(testpostMapper.list(param));
+    }
+    @Override
+    public List<TestpostDto.DetailResDto> deletedList(TestpostDto.ListReqDto param) {
+        return detailList(testpostMapper.deletedList(param));
     }
 
     @Override
@@ -73,5 +86,25 @@ public class TestpostServiceImpl implements TestpostService {
             newList.add(get(each.getId()));
         }
         return newList;
+    }
+    /*---------*/
+
+    //FILE UPLOAD
+    @Override
+    public void saveFile(MultipartFile param) throws IOException {
+
+        String fileName = param.getOriginalFilename();
+
+        String filePath = "/Users/seooonggyu/Documents/testpostFileUpload/";
+        File newfile = new File(filePath);
+        if(!newfile.exists()) { newfile.mkdirs(); }
+
+        Date date = new Date();
+        String temp_date = date.getTime() + "";
+        String finalName = filePath + temp_date + "_" + fileName;
+        FileCopyUtils.copy(param.getBytes(), new File(finalName));
+
+        ResponseEntity.status(HttpStatus.OK).body(temp_date + "_" + fileName);
+
     }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface TestpostMapper {
     TestpostDto.DetailResDto detail(Long id);
     List<TestpostDto.DetailResDto> list(TestpostDto.ListReqDto param);
+    List<TestpostDto.DetailResDto> deletedList(TestpostDto.ListReqDto param);
 }

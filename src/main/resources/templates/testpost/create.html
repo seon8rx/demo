@@ -16,12 +16,29 @@
 <input type="text" class="input_required" id="create_testpost_title" placeholder="title을 입력해주세요!"/>
 내용(content)
 <input type="text" id="create_testpost_content" />
-
 <button onclick="create_testpost()">
     저장
 </button>
+<br>
+파일 업로드 (file)
+<input type="file" id="create_testpost_file" onchange="readInputFile(this)"/>
+<button onclick="file_upload()">
+    파일 업로드
+</button>
+
 
 <script>
+    let tmpFile = null;
+    function readInputFile(input) {
+        if(input.files) {
+            let reader = new FileReader();
+            reader.readAsDataURL(input.files[0])
+            reader.onload = function(e) {
+                tmpFile = input.files[0];
+            }
+        }
+    }
+
     function create_testpost() {
         let input_required = $(".input_required");
         for (let each of input_required) {
@@ -52,6 +69,25 @@
                 alert(JSON.stringify(obj_data));
             }
         });
+    }
+
+    function file_upload() {
+        let fileData = new FormData();
+        fileData.append("file", tmpFile);
+
+        $.ajax({
+            url: "/api/testpost/upload",
+            type: "POST",
+            data: fileData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (data, status, xhr)=>{
+                console.log('업로드 성공:');
+                alert(JSON.stringify(data));
+
+            }
+        })
     }
 </script>
 </body>
