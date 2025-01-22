@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.BookMapper">
+    <select id="detail" parameterType="hashMap" resultType="com.example.demo.dto.BookDto$DetailResDto">
+        SELECT book.id
+             , book.deleted
+             , book.created_at as createdAt
+             , book.modified_at as modifiedAt
+             , book.title
+             , book.author
+             , book.isbn
+             , book.amount
+        FROM book
+        WHERE book.id = #{id}
+    </select>
+    <select id="list" parameterType="hashMap" resultType="com.example.demo.dto.BookDto$DetailResDto">
+        SELECT book.id
+        FROM book
+        WHERE book.id is not NULL
+        <if test = "deleted != null and deleted !=''">AND book.deleted = #{deleted}</if>
+        <if test = "sdate != null and sdate !=''">AND book.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+        <if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= book.created_at</if>
+        <if test = "title != null and title !=''">AND book.title LIKE CONCAT('%', #{title}, '%')</if>
+    </select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CommentMapper">
+    <select id="detail" parameterType="hashMap" resultType="com.example.demo.dto.CommentDto$DetailResDto">
+        SELECT comment.id
+             , comment.deleted
+             , comment.created_at as createdAt
+             , comment.modified_at as modifiedAt
+             , comment.author
+             , comment.content
+        FROM comment
+        WHERE comment.id = #{id}
+    </select>
+
+    <!--<resultMap id="CommentResultMap" type="com.example.demo.dto.CommentDto$DetailResDto">
+        <result property="id" column="id" />
+        <result property="author" column="author" />
+        <result property="content" column="content" />
+        <result property="testpost_id" column="testpost_id" />
+    </resultMap>-->
+    <select id="list" parameterType="hashMap" resultType="com.example.demo.dto.CommentDto$DetailResDto">
+        SELECT
+        comment.id AS id,
+        comment.author AS author,
+        comment.content AS content,
+        comment.testpost_id AS testpost_id
+        FROM comment
+        WHERE comment.id is not NULL AND comment.deleted is FALSE
+        <!--<if test = "deleted != null and deleted !=''">AND comment.deleted = #{deleted}</if>-->
+        <if test="author != null and author != ''">AND comment.author LIKE CONCAT('%', #{author}, '%')</if>
+        ORDER BY comment.id ASC
+    </select>
+    <select id="deletedList" parameterType="hashMap" resultType="com.example.demo.dto.CommentDto$DetailResDto">
+        SELECT comment.id
+        FROM comment
+        WHERE comment.id is not NULL AND comment.deleted is TRUE
+        <!--<if test = "deleted != null and deleted !=''">AND comment.deleted = #{deleted}</if>-->
+        <if test = "title != null and title !=''">AND comment.title LIKE CONCAT('%', #{title}, '%')</if>
+        ORDER BY comment.id ASC
+    </select>
+</mapper>

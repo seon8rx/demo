@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+create
+
+<div id="div_id" class="div_abcde">
+    신규 책 정보 입력
+</div>
+
+제목
+<input type="text" id="create_book_title" />
+작가
+<input type="text" id="create_book_author" />
+isbn
+<input type="text" id="create_book_isbn" />
+수량
+<input type="number" id="create_book_amount" />
+
+<button onclick="create_book()">
+    저장
+</button>
+
+<script>
+    function create_book(){
+        $.ajax({
+            url: "/api/book",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                title : $("#create_book_title").val()
+                ,author : $("#create_book_author").val()
+                ,isbn : $("#create_book_isbn").val()
+                ,amount : $("#create_book_amount").val()
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+
+</body>
+</html>

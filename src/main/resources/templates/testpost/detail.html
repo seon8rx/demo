@@ -23,6 +23,23 @@ deleted <input type="text" id="detail_testpost_deleted" readonly/>
     삭제
 </button>
 
+
+<br><br><br>
+
+<div id="div_comment" class="div_create">
+    <h3>testpost에 댓글 작성</h3>
+</div>
+<label for="comment_author">작성자:</label>
+<input type="text" id="comment_author" placeholder="Enter your name"/>
+<label for="comment_content">댓글:</label>
+<input type="text" id="comment_content" placeholder="Enter your comment"/>
+<button onclick="create_comment()">댓글 작성</button>
+
+<br><br><br>
+<button onclick="to_detail_comment()">작성된 댓글 보러가기</button>
+
+
+
 <script>
     let temp_url = window.location.href;
     let split_temp_url = temp_url.split('/');
@@ -96,6 +113,59 @@ deleted <input type="text" id="detail_testpost_deleted" readonly/>
                 alert(JSON.stringify(obj_data));
             }
         });
+    }
+
+    /*댓글 작성*/
+    function create_comment() {
+
+        let author = $.trim($("#comment_author").val());
+        let content = $.trim($("#comment_content").val());
+
+        /*let testpostId = 5;
+        let author = "test";
+        let content = "test comment";*/
+
+        /*if (!testpostId) {
+            alert("Please enter the Testpost ID.");
+            $("#comment_testpost_id").focus();
+            return;
+        }*/
+
+        if (!author) {
+            alert("Please enter the author's name.");
+            $("#comment_author").focus();
+            return;
+        }
+
+        if (!content) {
+            alert("Please enter the comment content.");
+            $("#comment_content").focus();
+            return;
+        }
+
+        $.ajax({
+            url: `/api/comment/${final_id}`,
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                author: author,
+                content: content
+            }),
+            success: (data, status, xhr) => {
+                alert("Comment created successfully!\n" + JSON.stringify(data));
+                $("#comment_author").val("");
+                $("#comment_content").val("");
+                /*console.log("Comment created successfully:", data);*/
+            },
+            error: (xhr, status, error) => {
+                alert("Failed to create comment.\n" + xhr.responseText);
+                /*console.error("Failed to create comment:", error);*/
+            }
+        });
+    }
+
+    function to_detail_comment() {
+        window.location.href = "/testpost/list?testpostId=${testpostId}";
     }
 </script>
 </body>

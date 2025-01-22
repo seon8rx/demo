@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+<div id="div_id" class="div_detail">
+    comment DETAIL (UPDATE, DELETE)
+</div>
+
+id <input type="text" id="detail_comment_id" readonly/>
+author <input type="text" id="detail_comment_author" readonly/>
+content <input type="text" id="detail_comment_content" />
+testpost_id <input type="text" id="detail_comment_testpost_id" readonly/>
+deleted <input type="text" id="detail_comment_deleted" readonly/>
+
+<button onclick="update_comment()">
+    수정
+</button>
+<button onclick="delete_comment()">
+    삭제
+</button>
+
+
+<script>
+    let temp_url = window.location.href;
+    let split_temp_url = temp_url.split('/');
+    let final_id = split_temp_url[split_temp_url.length - 1];
+    let split_q = final_id.split("?");
+    if(split_q.length > 0){
+        final_id = split_q[0];
+    }
+    $( document ).ready(function() {
+        detail_comment();
+    });
+
+    function detail_comment(){
+        $.ajax({
+            url: "/api/comment/detail",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                id : final_id
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                $("#detail_comment_id").val(obj_data["id"]);
+                $("#detail_comment_author").val(obj_data["author"]);
+                $("#detail_comment_content").val(obj_data["content"]);
+                $("#detail_comment_testpost_id").val(obj_data["testpost_id"]);
+                $("#detail_comment_deleted").val(obj_data["deleted"]);
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("ERROR");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+
+    function update_comment(){
+        $.ajax({
+            url: "/api/comment",
+            type: "PUT",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+                ,content : $("#detail_comment_content").val()
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("ERROR");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    function delete_comment(){
+        $.ajax({
+            url: "/api/comment",
+            type: "DELETE",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("ERROR");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+</script>
+</body>
+</html>
