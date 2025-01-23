@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Comments</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+<h3 id="tmp">Comments for Testpost</h3>
+<table border="3">
+    <thead>
+    <tr>
+        <th style="padding: 10px;">comment id</th>
+        <th style="padding: 10px;">author</th>
+        <th style="padding: 10px;">content</th>
+        <th style="padding: 10px;">created at</th>
+    </tr>
+    </thead>
+    <tbody id="comments-table"></tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const testpostId = urlParams.get("testpostId");
+
+        const tmpp = $("#tmp");
+        tmpp.html("Comments for Testpost : " + testpostId)
+
+        if (testpostId) {
+            fetchComments(testpostId);
+        } else {
+            alert("Testpost ID가 전달되지 않았습니다.");
+        }
+    });
+
+    function fetchComments(testpostId) {
+        console.log("Requested testpostId:", testpostId);
+        $.ajax({
+            url: `/api/comment/testpost/${testpostId}`,
+            type: "GET",
+            success: function(comments) {
+                console.log(comments);
+                const tableBody = $("#comments-table");
+                tableBody.html("");
+
+                if (comments.length === 0) {
+                    tableBody.append("<tr><td colspan='4'>no comments yet.</td></tr>");
+                    return;
+                }
+
+                comments.forEach(comment => {
+                    tableBody.append(`
+                            <tr>
+                                <td>${comment.id}</td>
+                                <td>${comment.author}</td>
+                                <td>${comment.content}</td>
+                                <td>${comment.createdAt}</td>
+                            </tr>
+                        `);
+                });
+            },
+            error: function(error) {
+                console.error("Failed to fetch comments:", error);
+                alert("댓글 데이터를 가져오는 데 실패했습니다.");
+            }
+        });
+    }
+</script>
+</body>
+</html>

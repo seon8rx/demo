@@ -46,9 +46,9 @@ public class CommentDto {
 
         private String author;
         private String content;
-        private Long testpost_id;
-        private Testpost testpost;
-
+        private Long testpostId;
+//        private Testpost testpost;
+        private String testpostTitle;
     }
 
     @AllArgsConstructor

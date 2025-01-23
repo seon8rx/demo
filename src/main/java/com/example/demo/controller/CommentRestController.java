@@ -31,6 +31,7 @@ public class CommentRestController {
     }
     @GetMapping("/list")
     public ResponseEntity<List<CommentDto.DetailResDto>> list(CommentDto.ListReqDto param){
+        System.out.println("여기는 레스트 컨트롤러의 list");
         return ResponseEntity.ok(commentService.list(param));
     }
     @GetMapping("/deleted_list")
@@ -55,6 +56,13 @@ public class CommentRestController {
     public ResponseEntity<Void> deletes(@RequestBody DefaultDto.DeletesReqDto param){
         commentService.deletes(param);
         return ResponseEntity.ok().build();
+    }
+
+    /*특정 testpost한테 작성된 댓글만 모두 불러오기*/
+    @GetMapping("/testpost/{testpostId}")
+    public ResponseEntity<List<CommentDto.DetailResDto>> getCommentsByTestpostId(@PathVariable Long testpostId) {
+        List<CommentDto.DetailResDto> comments = commentService.findCommentsByTestpostId(testpostId);
+        return ResponseEntity.ok(comments);
     }
 
 }

@@ -8,6 +8,8 @@
              , comment.modified_at as modifiedAt
              , comment.author
              , comment.content
+             , comment.testpost_id AS testpostId
+
         FROM comment
         WHERE comment.id = #{id}
     </select>
@@ -16,16 +18,19 @@
         <result property="id" column="id" />
         <result property="author" column="author" />
         <result property="content" column="content" />
-        <result property="testpost_id" column="testpost_id" />
+        <result property="testpostId" column="testpost_id" />
     </resultMap>-->
     <select id="list" parameterType="hashMap" resultType="com.example.demo.dto.CommentDto$DetailResDto">
         SELECT
-        comment.id AS id,
-        comment.author AS author,
-        comment.content AS content,
-        comment.testpost_id AS testpost_id
-        FROM comment
-        WHERE comment.id is not NULL AND comment.deleted is FALSE
+        comment.id,
+        comment.author,
+        comment.content,
+        comment.testpost_id AS testpostId,
+        testpost.title AS testpostTitle
+        FROM comment, testpost
+        WHERE comment.testpost_id = testpost.id
+          AND comment.id is not NULL AND comment.deleted is FALSE
+          /*AND comment.testpost_id = testpost.id*/
         <!--<if test = "deleted != null and deleted !=''">AND comment.deleted = #{deleted}</if>-->
         <if test="author != null and author != ''">AND comment.author LIKE CONCAT('%', #{author}, '%')</if>
         ORDER BY comment.id ASC
@@ -38,4 +43,21 @@
         <if test = "title != null and title !=''">AND comment.title LIKE CONCAT('%', #{title}, '%')</if>
         ORDER BY comment.id ASC
     </select>
+
+    <!--특정 testpost한테 작성된 댓글만 모두 불러오기-->
+    <select id="myComment" parameterType="java.lang.Long" resultType="com.example.demo.dto.CommentDto$DetailResDto">
+        SELECT
+        comment.id,
+        comment.author,
+        comment.content,
+        comment.created_at AS createdAt
+        FROM comment
+        WHERE comment.testpost_id = #{testpostId}
+        AND comment.deleted IS FALSE
+        <!--<if test="author != null and author != ''">
+            AND comment.author LIKE CONCAT('%', #{author}, '%')
+        </if>-->
+        ORDER BY comment.id ASC
+    </select>
+
 </mapper>

@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -76,6 +78,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto.DetailResDto> list(CommentDto.ListReqDto param) {
+        System.out.println(param.getAuthor());
+        System.out.println("여기는 서비스임플의 List");
         return detailList(commentMapper.list(param));
     }
 
@@ -89,10 +93,21 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public List<CommentDto.DetailResDto> detailList(List<CommentDto.DetailResDto> param) {
+        System.out.println("여기는 서비스임플의 detailList");
         List<CommentDto.DetailResDto> newList = new ArrayList<>();
         for(CommentDto.DetailResDto each : param) {
             newList.add(get(each.getId()));
         }
+
+        for(CommentDto.DetailResDto each : newList) {
+            System.out.println("\n@@@@"+each.getTestpostTitle()+", "+each.getTestpostId()+"\n");
+        }
         return newList;
+    }
+
+    /*특정 testpost한테 작성된 댓글만 모두 불러오기*/
+    @Override
+    public List<CommentDto.DetailResDto> findCommentsByTestpostId(Long testpostId) {
+        return commentMapper.myComment(testpostId);
     }
 }

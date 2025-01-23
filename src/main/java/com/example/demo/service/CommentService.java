@@ -23,4 +23,7 @@ public interface CommentService {
 
     //UPDATE
     void update(CommentDto.UpdateReqDto param);
+
+    /*특정 testpost한테 작성된 댓글만 모두 불러오기*/
+    List<CommentDto.DetailResDto> findCommentsByTestpostId(Long testpostId);
 }
