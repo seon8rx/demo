@@ -36,7 +36,22 @@ deleted <input type="text" id="detail_testpost_deleted" readonly/>
 <button onclick="create_comment()">댓글 작성</button>
 
 <br><br><br>
-<button onclick="to_detail_comment()">작성된 댓글 보러가기</button>
+<button onclick="to_detail_comment()">작성된 댓글 보러가기</button><br><br>
+
+
+<h3 id="tmp">Comments for Testpost</h3>
+<table border="3">
+    <thead>
+    <tr>
+        <th style="padding: 10px;">comment id</th>
+        <th style="padding: 10px;">author</th>
+        <th style="padding: 10px;">content</th>
+        <th style="padding: 10px;">created at</th>
+    </tr>
+    </thead>
+    <tbody id="comments-table"></tbody>
+</table>
+
 
 
 
@@ -50,6 +65,15 @@ deleted <input type="text" id="detail_testpost_deleted" readonly/>
     }
     $( document ).ready(function() {
         detail_testpost();
+
+        const tmpp = $("#tmp");
+        tmpp.html("Comments for Testpost : " + final_id);
+
+        if (final_id) {
+            fetchComments(final_id);
+        } else {
+            alert("Testpost ID가 전달되지 않았습니다.");
+        }
     });
 
     function detail_testpost(){
@@ -166,6 +190,39 @@ deleted <input type="text" id="detail_testpost_deleted" readonly/>
 
     function to_detail_comment() {
         window.location.href = `/testpost/my_comment?testpostId=${final_id}`;
+    }
+
+    function fetchComments(testpostId) {
+        console.log("Requested testpostId:", testpostId);
+        $.ajax({
+            url: `/api/comment/testpost/${testpostId}`,
+            type: "GET",
+            success: function(comments) {
+                console.log(comments);
+                const tableBody = $("#comments-table");
+                tableBody.html("");
+
+                if (comments.length === 0) {
+                    tableBody.append("<tr><td colspan='4'>no comments yet.</td></tr>");
+                    return;
+                }
+
+                comments.forEach(comment => {
+                    tableBody.append(`
+                            <tr>
+                                <td>${comment.id}</td>
+                                <td>${comment.author}</td>
+                                <td>${comment.content}</td>
+                                <td>${comment.createdAt}</td>
+                            </tr>
+                        `);
+                });
+            },
+            error: function(error) {
+                console.error("Failed to fetch comments:", error);
+                alert("댓글 데이터를 가져오는 데 실패했습니다.");
+            }
+        });
     }
 </script>
 </body>
