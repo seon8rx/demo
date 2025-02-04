@@ -89,7 +89,7 @@
             success: (data, status, xhr)=>{
                 console.log('업로드 성공:');
                 alert(JSON.stringify(data));
-                // $("#img_test").attr("src", "/image/" + data);
+                $("#img_test").attr("src", "/testpost/image/" + data);
                 $("#input_filename").val(data);
                 console.log($("#input_filename").val());
 
