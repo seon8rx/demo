@@ -26,6 +26,8 @@
     파일 업로드
 </button>
 
+<a href="javascript:filedownloadTest()">다운로드</a>
+
 <script>
     let tmpFile = null;
     function readInputFile(input) {
@@ -83,12 +85,18 @@
             processData: false,
             success: (data, status, xhr)=>{
                 console.log('업로드 성공:');
+                $("#img_test").attr("src", "/image/" + data);
                 alert(JSON.stringify(data));
+                alert(JSON.stringify(fileData));
+                alert(JSON.stringify(tmpFile))
 
             }
         })
     }
 
+    function filedownloadTest() {
+        location.href = "/download/" + $("#input_textfilename").val();
+    }
 
 
 </script>

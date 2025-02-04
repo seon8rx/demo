@@ -71,7 +71,7 @@ public class DefaultDto {
 
     @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
     public static class PagedListReqDto {
-        private int callpage; // 요청 페이지
+        private Integer callpage; // 요청 페이지
         private String orderby; //정렬 기준
         private String orderway; //정렬 방향
 
@@ -84,33 +84,36 @@ public class DefaultDto {
     }
     @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
     public static class PagedListResDto {
-        private int callpage;
-        private int itemcount;
-        private int pagecount;
+        private Integer callpage;
+        private Integer totalCount;
+        private Integer totalPage;
+        private Integer perpage;
+
         private Object list;
 
-        public static PagedListResDto init(PagedListReqDto param, int itemcount){
+        public static PagedListResDto init(PagedListReqDto param, int totalCount){
             //offset 을 구하기 위함!!
             Integer perpage = param.getPerpage();
             if(perpage == null){
                 param.setPerpage(10);
                 perpage = param.getPerpage();
             } else {
-                if(perpage < 0){
+                if(perpage <= 0){
                     param.setPerpage(10);
                     perpage = param.getPerpage();
                 }
             }
 
-            int pagecount = itemcount / perpage;
-            if(itemcount % perpage > 0){
-                pagecount++;
+            int totalPage = totalCount / perpage;
+            if(totalCount % perpage != 0){
+                totalPage++;
             }
             int callpage = param.getCallpage();
             if(callpage < 1){ callpage = 1; }
-            if(callpage > pagecount){ callpage = pagecount; }
+            if(callpage > totalPage){ callpage = totalPage; }
             int offset = (callpage - 1) * perpage;
             if(offset < 0){ offset = 0; }
+            if(offset > totalCount){ offset = totalCount; }
             param.setOffset(offset);
 
             //정렬 기준
@@ -127,9 +130,9 @@ public class DefaultDto {
             }
             param.setOrderway(orderway);
 
-            return DefaultDto.PagedListResDto.builder()
-                    .itemcount(itemcount)
-                    .pagecount(pagecount)
+            return PagedListResDto.builder()
+                    .totalCount(totalCount)
+                    .totalPage(totalPage)
                     .callpage(callpage)
                     .build();
         }

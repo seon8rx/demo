@@ -71,4 +71,10 @@ public class TestpostRestController {
         }
     }
 
+    //PAGED LIST
+    @GetMapping("/plist")
+    public ResponseEntity<DefaultDto.PagedListResDto> pagedList(TestpostDto.PagedListReqDto param) {
+        return ResponseEntity.ok(testpostService.pagedList(param));
+    }
+
 }

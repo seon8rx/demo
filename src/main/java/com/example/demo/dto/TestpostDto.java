@@ -77,4 +77,24 @@ public class TestpostDto {
         private String title;
 
     }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @SuperBuilder
+    @Setter
+    @Getter
+    public static class PagedListReqDto extends DefaultDto.PagedListReqDto {
+        private String userId;
+        private String title;
+    }
+
+    /*@AllArgsConstructor
+    @NoArgsConstructor
+    @SuperBuilder
+    @Setter
+    @Getter
+    public static class PagedListResDto extends DefaultDto.PagedListResDto {
+        private String userId;
+        private String title;
+    }*/
 }

@@ -107,4 +107,13 @@ public class TestpostServiceImpl implements TestpostService {
         ResponseEntity.status(HttpStatus.OK).body(temp_date + "_" + fileName);
 
     }
+
+    //PAGED LIST
+
+    @Override
+    public DefaultDto.PagedListResDto pagedList(TestpostDto.PagedListReqDto param) {
+        DefaultDto.PagedListResDto returnVal = DefaultDto.PagedListResDto.init(param, testpostMapper.pagedListCount(param));
+        returnVal.setList(detailList(testpostMapper.pagedList(param)));
+        return returnVal;
+    }
 }

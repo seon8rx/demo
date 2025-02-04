@@ -30,4 +30,28 @@
         <if test = "title != null and title !=''">AND testpost.title LIKE CONCAT('%', #{title}, '%')</if>
         ORDER BY testpost.id ASC
     </select>
+
+    <select id="pagedList" parameterType="hashMap" resultType="com.example.demo.dto.TestpostDto$DetailResDto">
+        SELECT testpost.id
+        FROM testpost
+        WHERE testpost.id is not NULL
+        <if test = "deleted != null">AND testpost.deleted = #{deleted}</if>
+        <!--<if test = "sdate != null and sdate !=''">AND testpost.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+        <if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= testpost.created_at</if>-->
+        <if test = "title != null and title !=''">AND testpost.title LIKE CONCAT('%', #{title}, '%')</if>
+        <if test = "orderby != null and orderby =='created_at'">ORDER BY testpost.created_at</if>
+        <if test = "orderby != null and orderby =='title'">ORDER BY testpost.title </if>
+        <if test = "orderway != null and orderway =='desc'"> DESC</if>
+        <if test = "orderway != null and orderway =='asc'"> ASC</if>
+        LIMIT #{offset}, #{perpage}
+    </select>
+    <select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+        SELECT count(testpost.id) as listsize
+        FROM testpost
+        WHERE testpost.id is not NULL
+        <if test = "deleted != null">AND testpost.deleted = #{deleted}</if>
+        <if test = "sdate != null and sdate !=''">AND testpost.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+        <if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= testpost.created_at</if>
+        <if test = "title != null and title !=''">AND testpost.title LIKE CONCAT('%', #{title}, '%')</if>
+    </select>
 </mapper>
