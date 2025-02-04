@@ -26,12 +26,15 @@
     파일 업로드
 </button>
 
+<input type="text" id="input_filename" />
+
 <a href="javascript:filedownloadTest()">다운로드</a>
+<img id="img_test" alt="test" src=""/>
 
 <script>
     let tmpFile = null;
     function readInputFile(input) {
-        if(input.files) {
+        if(input.files && input.files[0]) {
             let reader = new FileReader();
             reader.readAsDataURL(input.files[0])
             reader.onload = function(e) {
@@ -85,17 +88,19 @@
             processData: false,
             success: (data, status, xhr)=>{
                 console.log('업로드 성공:');
-                $("#img_test").attr("src", "/image/" + data);
                 alert(JSON.stringify(data));
-                alert(JSON.stringify(fileData));
-                alert(JSON.stringify(tmpFile))
+                // $("#img_test").attr("src", "/image/" + data);
+                $("#input_filename").val(data);
+                console.log($("#input_filename").val());
 
             }
         })
     }
 
     function filedownloadTest() {
-        location.href = "/download/" + $("#input_textfilename").val();
+        let filename = $("#input_filename").val();
+        console.log("다운로드 URL: /download/" + filename);
+        location.href = "/testpost/download/" + $("#input_filename").val();
     }
 
 

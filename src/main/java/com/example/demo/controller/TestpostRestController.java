@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.DefaultDto;
 import com.example.demo.dto.TestpostDto;
 import com.example.demo.service.TestpostService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,12 +64,15 @@ public class TestpostRestController {
 
     //FILE UPLOAD
     @PostMapping("/upload")
-    public void upload(@RequestParam("file") MultipartFile param) {
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile param) {
+        String returnVal = null;
         try {
-            testpostService.saveFile(param);
+            returnVal = testpostService.saveFile(param);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(returnVal);
     }
 
     //PAGED LIST

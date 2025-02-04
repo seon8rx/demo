@@ -26,7 +26,7 @@ public interface TestpostService {
     void deletes(DefaultDto.DeletesReqDto param);
 
     //FILE UPLOAD
-    void saveFile(MultipartFile param) throws IOException;
+    String saveFile(MultipartFile param) throws IOException;
 
     //PAGED LIST
     public DefaultDto.PagedListResDto pagedList(TestpostDto.PagedListReqDto params);

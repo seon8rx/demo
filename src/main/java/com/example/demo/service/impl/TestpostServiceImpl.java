@@ -91,7 +91,7 @@ public class TestpostServiceImpl implements TestpostService {
 
     //FILE UPLOAD
     @Override
-    public void saveFile(MultipartFile param) throws IOException {
+    public String saveFile(MultipartFile param) throws IOException {
 
         String fileName = param.getOriginalFilename();
 
@@ -104,7 +104,7 @@ public class TestpostServiceImpl implements TestpostService {
         String finalName = filePath + temp_date + "_" + fileName;
         FileCopyUtils.copy(param.getBytes(), new File(finalName));
 
-        ResponseEntity.status(HttpStatus.OK).body(temp_date + "_" + fileName);
+        return temp_date + "_" + fileName;
 
     }
 
